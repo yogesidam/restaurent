@@ -1,75 +1,94 @@
 <x-app-layout>
-
 </x-app-layout>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {{-- include css here --}}
-    @include('admin.admincss')
-    <style>
-        table{
-            position: relative;
-            left: 30px;
-            top: 100px;
-            border: 1px solid brown;
-            width: 1000px;
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        thead{
-            background-color: brown;
-            color: yellow;
-            font-weight: bold;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-        }
-        tbody{
-            background-color: rgb(97, 97, 97);
-        }
-    </style>
+    @include('admin.admincss')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.css" rel="stylesheet" />
 </head>
 
 <body>
-
     <div class="container-scroller">
 
-    {{-- include navbar here --}}
-    @include('admin.navbar')
+        @include('admin.navbar')
 
-    <div >
-        <table>
-            <thead>
-                <tr>
-                    <td style="padding:20px">Name</td>
-                    <td style="padding:20px">Email address</td>
-                    <td style="padding:20px">Phone no.</td>
-                    <td style="padding:20px">Guest no.</td>
-                    <td style="padding:20px">Date</td>
-                    <td style="padding:20px">Time</td>
-                    <td style="padding:20px">Message</td>
-                </tr>
-            </thead>
-            <tbody style="color: yellow">
-                @foreach ($data as $d)
+        <div class="container text-center" style="width:900px; margin:50px">
+            <table class="table datatable">
+                <thead style="background-color: rgb(201, 48, 48)">
                     <tr>
-                        <td style="padding:10px">{{$d->name}}</td>
-                        <td style="padding:10px">{{$d->email}}</td>
-                        <td style="padding:10px">{{$d->phone}}</td>
-                        <td style="padding:10px">{{$d->guest}}</td>
-                        <td style="padding:10px">{{$d->date}}</td>
-                        <td style="padding:10px">{{$d->time}}</td>
-                        <td style="padding:10px">{{$d->message}}</td>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Name</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Email</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Phone</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Guest</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Date</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Time</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Message</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+            </table>
+        </div>
     </div>
 
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
     @include('admin.adminscript')
-    <!-- End custom js for this page -->
-</body>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                // serverSide: true,
+                ajax: {
+                    url: "{{ url('/reservationlist') }}",
+                    type: "POST",
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: "json",
+                },
+                columns: [
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone'
+                    },
+                    {
+                        data: 'guest',
+                        name: 'guest'
+                    },
+                    {
+                        data: 'date',
+                        name: 'date'
+                    },
+                    {
+                        data: 'time',
+                        name: 'time'
+                    },
+                    {
+                        data: 'message',
+                        name: 'message'
+                    },
+                   
+                ],
+            });
+        });
+    </script>
+
+   </body>
 
 </html>

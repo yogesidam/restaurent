@@ -10,7 +10,6 @@ use App\Models\Foodchef;
 use App\Models\Lunch;
 use App\Models\Order;
 use Yajra\DataTables\DataTables;  
-// use DataTables;        //datatables path .
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,14 +88,10 @@ class HomeController extends Controller
     }
 
     public function remove($id){
-        if(Auth::id()==$id){
         $data = Cart::find($id);
+        dd($data);
         $data->delete();
         return redirect()->back();
-        }
-        else{
-            return redirect('login');
-        }
     }
 
     public function order($id){
@@ -106,14 +101,18 @@ class HomeController extends Controller
     }
 
     public function orderstore(Request $request){
+        $price = $request->price;
+        $quantity = $request->quantity;
         $data = new Order();
         $data->foodname = $request->foodname;
-        $data->price = $request->price;
-        $data->quantity = $request->quantity;
+        $data->price = $price;
+        $data->quantity = $quantity;
         $data->name = $request->name;
         $data->phone = $request->phone;
         $data->address = $request->address;
+        $data->total = $price * $quantity;
         $data->save();
+        return redirect('redirects');
    }
 
    public function temp(){

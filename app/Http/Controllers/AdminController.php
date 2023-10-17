@@ -26,26 +26,29 @@ class AdminController extends Controller
         }
     }
 
-    // public function tempo(Request $request){
+    public function tempo(Request $request){
 
-    //     if ($request->ajax()) {
-    //         $data = User::all();
-    //         return Datatables::of($data)
-    //             ->addIndexColumn()
-    //            ->addColumn('action', function ($row) {
-    //         if ($row->usertype == '0') {
-    //               $actionBtn = '<a href="'.url('/delete/user', $row->id).'"><button class="btn btn-danger">Delete</button></a>';
-    //            } 
-    //            else {
-    //               $actionBtn = '<span style="color: black;font-weidth:bold">Not allowed</span>';
-    //             }
-    //               return $actionBtn;
-    //            })
+        if ($request->ajax()) {
+            $data = User::all();
+            return Datatables::of($data)
+                ->addIndexColumn()
+               ->addColumn('action', function ($row) {
+            if ($row->usertype == '0') {
+                  $actionBtn = '<a href="'.url('/delete/user', $row->id).'"><button class="btn btn-danger">Delete</button></a>';
+               } 
+               else {
+                  $actionBtn = '<span style="color: red;font-weidth:bold">Not allowed</span>';
+                }
+                  return $actionBtn;
+               })
+               ->setRowClass(function ($col) {
+                return $col->usertype == 1 ? 'text-danger' : '';   //TO add css in Row
+            })
     
-    //             ->rawColumns(['action'])
-    //             ->make(true);
-    //         }
-    //     }
+                ->rawColumns(['action'])
+                ->make(true);
+            }
+        }
 
     // for delete any user.-----
     public function deleteuser($id){
@@ -64,8 +67,17 @@ class AdminController extends Controller
         else{
             return redirect('login');
         }
-
     }
+    // public function foodlist(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Food::all();
+    //         return DataTables::of($data)
+    //             ->addIndexColumn()
+               
+    //             ->make(true);
+    //     }
+    // }
 
     // to store the food menu .------
     public function upload(Request $request){
@@ -134,15 +146,26 @@ class AdminController extends Controller
         return redirect()->back();
     }
 // So admin can view the costumer which make a reservation.
-    public function viewreservation(){
-        if(Auth::id()){
-        $data = Reservation ::all();
-        return view('admin.adminreservation', compact('data'));
-        }
-        else{
+    public function viewreservation()
+    {
+        if (auth()->check()) {
+            $data = Reservation::all();
+            return view('admin.adminreservation', compact('data'));
+        } else {
             return redirect('login');
         }
     }
+    public function reservationlist(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Reservation::all();
+            return DataTables::of($data)
+                ->addIndexColumn()
+               
+                ->make(true);
+        }
+    }
+
 // Admin can see those chef data that are in the home page.
     public function viewchef(){
         if(Auth::id()){
@@ -208,6 +231,17 @@ class AdminController extends Controller
             return redirect('login');
         }
     }
+    public function orderlist(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Order::all();
+            return DataTables::of($data)
+                ->addIndexColumn()
+               
+                ->make(true);
+        }
+    }
+
 // Admin can filter the order data to find the specific coustemer.
     public function search(Request $request){
         $search = $request->search;

@@ -128,7 +128,7 @@ https://templatemo.com/tm-558-klassy-cafe
     </header><br>
 
     <div  class="container" style="position:relative;top:100px">
-        {{-- <form action="{{ url('/order/store') }}" method="post">
+        <form action="{{ url('/order/store') }}" method="post">
             @csrf
             <div class="form-group">
                 <label for="inputfoodname">Food name</label>
@@ -155,31 +155,9 @@ https://templatemo.com/tm-558-klassy-cafe
                 <input type="address" name="address" id="inputaddress" class="form-control">
             </div><br><hr>
             <button type="submit" class="btn bg-success text-light">Order Confirm</button>
-        </form>--}}
-        <div class="row">
-            <div class="col-6">
-              <img src="/FoodImages/{{$data->image}}" width="500px" alt=""> 
-            </div>
-            <div class="col-6" style="position:relative;top:100px">
-               <p> Discription:-{{$data->description}}</p>
-            </div>
-        </div>
-    </div>
-
+        </form>
+      
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-      $(document).ready(function (){
-        $('#order').on('click', function(){
-            $('#appear').show();
-
-        });
-        $('#close').on('click', function(){
-            $('#appear').hide();
-            
-        })
-      })
-    </script>
     <script src="assets/js/jquery-2.1.0.min.js"></script>
 
     <!-- Bootstrap -->

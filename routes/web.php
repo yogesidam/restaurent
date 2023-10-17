@@ -74,7 +74,8 @@ Route::post('/upload/{id}',[AdminController::class,'update']);
 Route::post('/reservation',[AdminController::class,'reservation']);
 
 // Route for viw the reservation in admin page.--------
-Route::get('/viewreservation',[AdminController::class,'viewreservation']);
+Route::get('/viewreservation', [AdminController::class, 'viewreservation']);
+Route::post('/reservationlist', [AdminController::class, 'reservationlist']);
 
 
 Route::get('/viewchef',[AdminController::class,'viewchef']);
@@ -93,6 +94,7 @@ Route::get('/deletechef/{id}',[AdminController::class,'deletechef']);
 
 
 Route::get('/orders',[AdminController::class,'orders']);
+Route::post('/orderlist',[AdminController::class,'orderlist']);
 
 
 Route::post('/search',[AdminController::class,'search']);

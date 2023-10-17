@@ -1,69 +1,70 @@
 <x-app-layout>
-
 </x-app-layout>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {{-- include css here --}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
+
     @include('admin.admincss')
-    <style>
-        .container{position: relative;left: 250px;top: 50px;margin-bottom: 100px}
-        .btn{position: absolute;left: 250px;font-size: 20px;font-weight: bold;color: yellow;background-color: brown}
-        table{position: relative;left: -150px;width: 900px;
-            border: 1px solid rgb(194, 77, 77);
-            text-align: center;
-        }
-        #bt{background-color: brown;padding: 10px;border-radius: 40px;color: yellow;font-weight: bold;border: 1px solid yellow}
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.css" rel="stylesheet" />
 </head>
 
 <body>
-
     <div class="container-scroller">
 
-    {{-- include navbar here --}}
-    @include('admin.navbar')
+        @include('admin.navbar')
 
-    <div class="container">
-        <form action="{{ url('/search') }}" method="post">
-            @csrf
-            <input type="text" class="text-light bg-dark" name="search">
-            <button type="submit" class="btn bg-danger text-light">Search</button>
-        </form><br><br>
-        <table>
-            <thead style="background-color: brown;color:yellow">
-                <tr>
-                    <th style="padding: 30px">Name</th>
-                    <th style="padding: 30px">Phone</th>
-                    <th style="padding: 30px">Address</th>
-                    <th style="padding: 30px">Foodname</th>
-                    <th style="padding: 30px">Price</th>
-                    <th style="padding: 30px">Quantity</th>
-                    <th style="padding: 30px">Total price</th>
-                </tr>
-            </thead>
-            <tbody style="background-color: rgb(47, 47, 47)">
-                @foreach ($data as $d)
+        <div class="container text-center" style="width:900px; margin:50px">
+            <table class="table datatable">
+                <thead style="background-color: rgb(201, 48, 48)">
                     <tr>
-                        <td style="padding: 10px">{{$d->name}}</td>
-                        <td style="padding: 10px">{{$d->phone}}</td>
-                        <td style="padding: 10px">{{$d->address}}</td>
-                        <td style="padding: 10px">{{$d->foodname}}</td>
-                        <td style="padding: 10px">{{$d->price}}$</td>
-                        <td style="padding: 10px">{{$d->quantity}}</td>
-                        <td style="padding: 10px">{{$d->price * $d->quantity}}$</td>
+                        <th style="padding: 30px" class="text-warning">Name</th>
+                        <th style="padding: 30px" class="text-warning">Phone</th>
+                        <th style="padding: 30px" class="text-warning">Address</th>
+                        <th style="padding: 30px" class="text-warning">Foodname</th>
+                        <th style="padding: 30px" class="text-warning">Price</th>
+                        <th style="padding: 30px" class="text-warning">Quantity</th>
+                        <th style="padding: 30px" class="text-warning">Total price</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+            </table>
+        </div>
     </div>
 
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
     @include('admin.adminscript')
-    <!-- End custom js for this page -->
-</body>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                // serverSide: true,
+                ajax: {
+                    url: "{{ url('/orderlist') }}",
+                    type: "POST",
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: "json",
+                },
+                columns: [
+                    { data: 'name', name: 'name'},
+                    { data: 'phone', name: 'phone'},
+                    { data: 'address', name: 'address'},
+                    { data: 'foodname', name: 'foodname'},
+                    { data: 'price', name: 'price'},
+                    { data: 'quantity', name: 'quantity'},
+                    { data: 'total', name: 'total'},
+                ],
+            });
+        });
+    </script>
+   </body>
 </html>

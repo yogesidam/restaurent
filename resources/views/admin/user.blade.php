@@ -4,69 +4,80 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style>
-        table {
-            
-            position: relative;
-            left: 100px;
-            top: 100px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid rgb(194, 77, 77);
-            width: 900px;
-        }
-        thead{
-            font-size: 20px;
-            font-family:Times-New-Roman;
-        }
-        #bt{background-color: brown;padding: 10px;border-radius: 40px;color: yellow;font-weight: bold;}
-
-    </style>
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
     @include('admin.admincss')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.css" rel="stylesheet" />
 </head>
+
 <body>
     <div class="container-scroller">
 
         @include('admin.navbar')
 
-        <div style="margin-bottom: 100px;">
-            <table >
-                <thead style="background-color: brown;color:yellow;font-weidth: bold;">
+        <div class="container" style="width:900px; margin-top:50px">
+
+
+            <table class="table datatable">
+                <thead style="background-color: rgb(201, 48, 48)">
                     <tr>
-                        <th style="padding: 20px">Name</th>
-                        <th style="padding: 20px">Email</th>
-                        <th style="padding: 20px">Action</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Id</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Name</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Email</th>
+                        <th style="padding:30px;font-size:20px" class="text-warning">Action</th>
                     </tr>
                 </thead>
-                <tbody style="background-color: rgb(47, 47, 47)">
-                    @foreach ($data as $d)
-                        <tr>
-                            <td style="padding: 10px">{{ $d->name }}</td>
-                            <td style="padding: 10px">{{ $d->email }}</td>
-
-                            @if ($d->usertype == '0')
-                                <td style="padding: 10px"><a href="{{url('/delete/user',$d->id)}}">
-                                    <button id="bt">Delete</button></a>
-                                </td>
-
-                            @else
-                                <td style="padding: 10px;color: yellow"><a >Notallowed</a></td>
-                            @endif
-                        </tr>
-                    @endforeach
-                </tbody>
             </table>
-            </center>
         </div>
 
     </div>
     @include('admin.adminscript')
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var list = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ url('/tempo') }}",
+                    type: "POST",
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: "json",
+                },
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: true
+                    },
+                ]
+
+
+            });
+        });
+    </script>
 </body>
 
 </html>
-

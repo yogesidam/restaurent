@@ -143,9 +143,9 @@ https://templatemo.com/tm-558-klassy-cafe
                     @csrf
                 @foreach ($data as $d)
                 <tr align="center">
-                    <td> <input type="text" name="foodname[]" value="{{$d->title}}" hidden> {{$d->title}}</td>
-                    <td><input type="text" name="price[]" value="{{$d->price}}" hidden>{{$d->price}}</td>
-                    <td><input type="text" name="quantity[]" value="{{$d->quantity}}" hidden>{{$d->quantity}}</td>
+                    <td> {{$d->title}}</td>
+                    <td>{{$d->price}}</td>
+                    <td>{{$d->quantity}}</td>
                     <td><img src="{{asset('FoodImages/'.$d->image)}}" width="200px" alt=""></td>
                     <td><a href="{{ url('/order',$d->id) }}" class="btn btn-danger">Order</a></td>
                     <td><a href="{{ url('/remove',$d->id) }}" class="btn btn-warning">Delete</a></td>
